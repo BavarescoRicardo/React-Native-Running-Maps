@@ -7,7 +7,8 @@ const {width, height} = Dimensions.get('screen');
 
 export default function App(){
   const [region, setRegion] = useState(null);
-  const [km, setKm] = useState(0);
+  const [km, setKm] = useState(null);
+  const [fimKm, setfimK] = useState(0);
 
   useEffect(() => {
     getMyLocation();
@@ -15,12 +16,12 @@ export default function App(){
 
   function getMyLocation(){
     Geolocation.getCurrentPosition(data => {
-      alert("Lat.. "+ data.coords.latitude)
-      alert("Long.. "+ data.coords.longitude)
+      // console.log("Lat.. "+ data.coords.latitude)
+      // console.log("Long.. "+ data.coords.longitude)
 
       setRegion({
-        latitude: data.coords.latitude,
-        longitude: data.coords.longitude,
+        latitude: (data.coords.latitude * - 1000),
+        longitude: (data.coords.longitude * - 1000),
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       })
@@ -29,6 +30,33 @@ export default function App(){
       enableHighAccuracy: true,
       timeout: 25000
     })
+  }
+
+  function calcularDistanciaI(){    
+    setKm({
+      x: region.latitude,
+      y: region.longitude
+    })    
+
+  }
+
+  function calcularDistanciaF(){
+    alert('Final da atividade')
+    // calcular variacao de kms
+    setfimK((region.latitude - km.x) + (region.longitude - km.y))
+
+    alert('Total corrida: '+ fimKm)
+    depur(false);
+
+  }
+
+  function depur(fim){
+    
+    console.log(region.latitude)
+    console.log(region.longitude)
+    console.log(km.x)
+    console.log(km.y)
+
   }
 
   return(
@@ -69,6 +97,7 @@ export default function App(){
               onPress={() => {
                 Alert.alert('Iniciado!')
                 getMyLocation();
+                calcularDistanciaI();
               }}
             />
 
@@ -77,11 +106,12 @@ export default function App(){
               onPress={() => {
                 Alert.alert('Finalizado!')
                 getMyLocation();
+                calcularDistanciaF();
               }}
             />
           </View>
           <Text>
-            Distancia percorrida:  {km}
+            Distancia percorrida:  {fimKm}
           </Text>        
         </View>
     </View>
