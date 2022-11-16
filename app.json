@@ -1,4 +1,9 @@
 {
   "name": "nativerunning",
-  "displayName": "nativrunning"
+  "displayName": "nativrunning",
+  "extra": {
+    "eas": {
+      "projectId": "d3c3e4b6-cafa-402f-aab7-fd7b357faf0f"
+    }
+  }
 }

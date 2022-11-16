@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, StyleSheet, Platform, PermissionsAndroid, Dimensions} from 'react-native';
+import {View, Text, StyleSheet, Button, Platform, PermissionsAndroid, Dimensions, Alert} from 'react-native';
 import MapView from 'react-native-maps';
 import Geolocation from 'react-native-geolocation-service';
 
@@ -7,6 +7,7 @@ const {width, height} = Dimensions.get('screen');
 
 export default function App(){
   const [region, setRegion] = useState(null);
+  const [km, setKm] = useState(0);
 
   useEffect(() => {
     getMyLocation();
@@ -14,8 +15,8 @@ export default function App(){
 
   function getMyLocation(){
     Geolocation.getCurrentPosition(data => {
-      console.log("Lat.. "+ data.coords.latitude)
-      console.log("Long.. "+ data.coords.longitude)
+      alert("Lat.. "+ data.coords.latitude)
+      alert("Long.. "+ data.coords.longitude)
 
       setRegion({
         latitude: data.coords.latitude,
@@ -31,7 +32,7 @@ export default function App(){
   }
 
   return(
-    <View style={StyleSheet.container}>
+    <View style={styles.container}>
         <MapView
           onMapReady={() => {
             Platform.OS ==='android' ?
@@ -42,7 +43,7 @@ export default function App(){
               })
             : ''
           }}
-          style={{width: width, height: height}}
+          style={{width: width, height: height/2}}
 
           region={region}
           zoomEnabled={true}
@@ -57,16 +58,62 @@ export default function App(){
           //   longitudeDelta: 0.0421,
           // }}
         />
+
+        <View style={{padding: 30}}>
+          <Text>
+            Aplicação para corridas
+          </Text>
+          <View style={styles.botoes}>
+            <Button              
+              title="Iniciar treino"
+              onPress={() => {
+                Alert.alert('Iniciado!')
+                getMyLocation();
+              }}
+            />
+
+            <Button
+              title="Finalizar treino"
+              onPress={() => {
+                Alert.alert('Finalizado!')
+                getMyLocation();
+              }}
+            />
+          </View>
+          <Text>
+            Distancia percorrida:  {km}
+          </Text>        
+        </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    height: 400,
-    width: 400,
+    height: height,
+    width: width,
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginBottom: 20,
+    fontSize: 16,
   },
+  title: {
+    textAlign: 'center',
+    marginVertical: 8,
+  },
+  fixToText: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  separator: {
+    marginVertical: 8,
+    borderBottomColor: '#737373',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+  },
+  botoes: {
+    margin: 50,
+    elevation: 1,
+    padding: 10
+  }
 })
 
