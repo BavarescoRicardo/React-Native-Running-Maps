@@ -37,7 +37,7 @@ export default function App(){
   function calcularDistanciaI(){    
     let agora = new Date();
     
-    alert(getCurrentTime(agora))
+    alert("Iniciado: " + getCurrentTime(agora))
 
     setKm({
       x: region.latitude,
@@ -67,11 +67,6 @@ export default function App(){
     console.log(region.longitude)
     console.log(km.x)
     console.log(km.y)
-
-    console.log("Duração..")
-    console.log(duracao.hours)
-    console.log(duracao.minutes)
-    console.log(duracao.seconds)
 
   }
 
@@ -140,7 +135,6 @@ export default function App(){
             <Button              
               title="Iniciar treino"
               onPress={() => {
-                Alert.alert('Iniciado!')
                 getMyLocation();
                 calcularDistanciaI();
               }}
@@ -160,7 +154,7 @@ export default function App(){
           </Text>
 
           <Text>
-            Duração da atividade:  {} 
+            Duração da atividade:  {(duracaoFim.hours >= 0)? ((duracaoFim.hours)+ ':' + (duracaoFim.minutes) + ':' + (duracaoFim.seconds)) : 0} 
           </Text>        
         </View>
     </View>
