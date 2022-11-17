@@ -22,19 +22,20 @@ export default function App(){
       // console.log("Long.. "+ data.coords.longitude)
 
       setRegion({
-        latitude: (data.coords.latitude * - 1000),
-        longitude: (data.coords.longitude * - 1000),
+        latitude: (data.coords.latitude * 111.1),
+        longitude: (data.coords.longitude * 111.3),
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       })
     },
     () => {console.log("Erro para localizar celular")}, {
       enableHighAccuracy: true,
-      timeout: 25000
+      timeout: 5000
     })
   }
 
-  function calcularDistanciaI(){    
+  function calcularDistanciaI(){
+    getMyLocation();
     let agora = new Date();
     
     alert("Iniciado: " + getCurrentTime(agora))
@@ -47,26 +48,51 @@ export default function App(){
   }
 
   function calcularDistanciaF(){
-    alert('Final da atividade')
+    getMyLocation();
+    
     // calcular variacao de kms
-    setfimK((region.latitude - km.x) + (region.longitude - km.y))
+    setfimK(Math.abs(region.latitude - km.x) + Math.abs(region.longitude - km.y))
+    distance(km.x, km.y, region.latitude, region.longitude);
 
-    alert('Total corrida: '+ fimKm)
-    depur(false);
+    alert('Final.. Total corrida: '+ fimKm)
+    
 
     let agora = new Date();
     
     alert(calcularDuracao(agora))
+    depur();
 
 
   }
 
-  function depur(fim){
+  function distance(lat1, lon1, lat2, lon2) {
+    if ((lat1 == lat2) && (lon1 == lon2)) {
+      return 0;
+    }
+    else {
+      var radlat1 = Math.PI * lat1/180;
+      var radlat2 = Math.PI * lat2/180;
+      var theta = lon1-lon2;
+      var radtheta = Math.PI * theta/180;
+      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
+      if (dist > 1) {
+        dist = 1;
+      }
+      dist = Math.acos(dist);
+      dist = dist * 180/Math.PI;
+      dist = dist * 60 * 1.1515;
+      dist = dist * 1.609344;
+      alert("Distancia funcao dist..  " + dist);
+      return dist;
+    }
+  }
+
+  function depur(){
     
-    console.log(region.latitude)
-    console.log(region.longitude)
-    console.log(km.x)
-    console.log(km.y)
+    console.log(Math.abs(region.latitude))
+    console.log(Math.abs(region.longitude))
+    console.log(Math.abs(km.x))
+    console.log(Math.abs(km.y))
 
   }
 
@@ -134,8 +160,7 @@ export default function App(){
           <View style={styles.botoes}>
             <Button              
               title="Iniciar treino"
-              onPress={() => {
-                getMyLocation();
+              onPress={() => {                
                 calcularDistanciaI();
               }}
             />
@@ -144,7 +169,6 @@ export default function App(){
               title="Finalizar treino"
               onPress={() => {
                 Alert.alert('Finalizado!')
-                getMyLocation();
                 calcularDistanciaF();
               }}
             />
@@ -172,19 +196,19 @@ const styles = StyleSheet.create({
   },
   title: {
     textAlign: 'center',
-    marginVertical: 8,
+    marginVertical: 4,
   },
   fixToText: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   separator: {
-    marginVertical: 8,
+    marginVertical: 4,
     borderBottomColor: '#737373',
     borderBottomWidth: StyleSheet.hairlineWidth,
   },
   botoes: {
-    margin: 50,
+    margin: 20,
     elevation: 1,
     padding: 10
   }
