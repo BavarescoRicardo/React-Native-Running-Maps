@@ -9,6 +9,8 @@ export default function App(){
   const [region, setRegion] = useState(null);
   const [km, setKm] = useState(null);
   const [fimKm, setfimK] = useState(0);
+  const [duracao, setDuracao] = useState(null);
+  const [duracaoFim, setDuracaoFim] = useState([0]);
 
   useEffect(() => {
     getMyLocation();
@@ -33,6 +35,10 @@ export default function App(){
   }
 
   function calcularDistanciaI(){    
+    let agora = new Date();
+    
+    alert(getCurrentTime(agora))
+
     setKm({
       x: region.latitude,
       y: region.longitude
@@ -48,6 +54,11 @@ export default function App(){
     alert('Total corrida: '+ fimKm)
     depur(false);
 
+    let agora = new Date();
+    
+    alert(calcularDuracao(agora))
+
+
   }
 
   function depur(fim){
@@ -56,6 +67,40 @@ export default function App(){
     console.log(region.longitude)
     console.log(km.x)
     console.log(km.y)
+
+    console.log("Duração..")
+    console.log(duracao.hours)
+    console.log(duracao.minutes)
+    console.log(duracao.seconds)
+
+  }
+
+  const getCurrentTime = (today) => {
+
+    var hours = today.getHours();
+
+    var minutes = today.getMinutes();
+
+    var seconds = today.getSeconds();
+
+    setDuracao({hours, minutes, seconds})
+    return hours + ':' + minutes + ':' + seconds;
+
+  }
+
+  const calcularDuracao = (today) => {
+
+    var hours = today.getHours();
+    hours -= duracao.hours;
+
+    var minutes = today.getMinutes();
+    hours -= duracao.minutes;
+
+    var seconds = today.getSeconds();
+    hours -= duracao.seconds;
+
+    setDuracaoFim({hours, minutes, seconds})
+    return hours + ':' + minutes + ':' + seconds;
 
   }
 
@@ -112,6 +157,10 @@ export default function App(){
           </View>
           <Text>
             Distancia percorrida:  {fimKm}
+          </Text>
+
+          <Text>
+            Duração da atividade:  {} 
           </Text>        
         </View>
     </View>
