@@ -91,16 +91,16 @@ export default function App(){
   const calcularDuracao = (today) => {
 
     var hours = today.getHours();
-    hours -= duracao.hours;
+     hours -= duracao.hours;
 
     var minutes = today.getMinutes();
-    hours -= duracao.minutes;
+    minutes -= duracao.minutes;
 
     var seconds = today.getSeconds();
-    hours -= duracao.seconds;
+    seconds -= duracao.seconds;
 
     setDuracaoFim({hours, minutes, seconds})
-    return hours + ':' + minutes + ':' + seconds;
+    return (hours)+ ':' + (minutes) + ':' + (seconds);
 
   }
 
