@@ -22,8 +22,8 @@ export default function App(){
       // console.log("Long.. "+ data.coords.longitude)
 
       setRegion({
-        latitude: (data.coords.latitude * 111.1),
-        longitude: (data.coords.longitude * 111.3),
+        latitude: (data.coords.latitude),
+        longitude: (data.coords.longitude),
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421
       })
@@ -35,6 +35,7 @@ export default function App(){
   }
 
   function calcularDistanciaI(){
+    setfimK(0);
     getMyLocation();
     let agora = new Date();
     
@@ -51,8 +52,8 @@ export default function App(){
     getMyLocation();
     
     // calcular variacao de kms
-    setfimK(Math.abs(region.latitude - km.x) + Math.abs(region.longitude - km.y))
-    distance(km.x, km.y, region.latitude, region.longitude);
+    console.log(setfimK(Math.abs(region.latitude - km.x) + Math.abs(region.longitude - km.y)));
+    setfimK(distFinal({latitude: km.x, longitude: km.y}, {latitude: region.latitude, longitude: region.longitude}));
 
     alert('Final.. Total corrida: '+ fimKm)
     
@@ -65,26 +66,17 @@ export default function App(){
 
   }
 
-  function distance(lat1, lon1, lat2, lon2) {
-    if ((lat1 == lat2) && (lon1 == lon2)) {
-      return 0;
-    }
-    else {
-      var radlat1 = Math.PI * lat1/180;
-      var radlat2 = Math.PI * lat2/180;
-      var theta = lon1-lon2;
-      var radtheta = Math.PI * theta/180;
-      var dist = Math.sin(radlat1) * Math.sin(radlat2) + Math.cos(radlat1) * Math.cos(radlat2) * Math.cos(radtheta);
-      if (dist > 1) {
-        dist = 1;
-      }
-      dist = Math.acos(dist);
-      dist = dist * 180/Math.PI;
-      dist = dist * 60 * 1.1515;
-      dist = dist * 1.609344;
-      alert("Distancia funcao dist..  " + dist);
-      return dist;
-    }
+  function distFinal(mk1, mk2) {
+    var R = 3958.8; // Radius of the Earth in miles
+    var rlat1 = mk1.latitude * (Math.PI/180); // Convert degrees to radians
+    var rlat2 = mk2.latitude * (Math.PI/180); // Convert degrees to radians
+    var difflat = rlat2-rlat1; // Radian difference (latitudes)
+    var difflon = (mk2.longitude-mk1.longitude) * (Math.PI/180); // Radian difference (longitudes)
+
+    var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
+    console.log("Distancia nova funcao")
+    console.log(d)
+    return d*2;
   }
 
   function depur(){
